@@ -1,0 +1,19 @@
+.header {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  background-color: white;
+  border-bottom: 1px solid black;
+  padding: 0 15px;
+}
+
+.logo_button {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.app-cart-button {
+  display: flex;
+  justify-content: flex-end;
+}

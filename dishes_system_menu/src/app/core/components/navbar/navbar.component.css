@@ -1,0 +1,25 @@
+.app-cart-button {
+  display: flex;
+  align-items: center;
+}
+
+.navigation_list {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  padding-left: 0;
+}
+
+.navigation_item {
+  font-size: 21px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+.navigation_item:hover {
+  color: var(--main-color);
+  transition: 0.3s;
+}
+
+.navigation_item:first-child {
+  margin-left: 0;
+}
