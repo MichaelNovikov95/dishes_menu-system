@@ -1,1 +1,9 @@
-<p>menu-item works!</p>
+<div class="dish_modal">
+  <span class="back_button" (click)="goBack()">X</span>
+  <!-- <div><img src="{{ dish?.image }}" alt="{{ dish?.name }}" /></div> -->
+  <div>
+    <h3>{{ dish?.name }}</h3>
+    <p>{{ dish?.price | currency }}</p>
+    <p>{{ dish?.description }}</p>
+  </div>
+</div>

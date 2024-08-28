@@ -1,13 +1,18 @@
 <section>
   <ul class="categories">
     @for(category of categories; track category){
-    <li class="category" (click)="filterByCategory(category)">
+    <li
+      class="category"
+      [ngClass]="{ active: choosenCategory === category }"
+      (click)="filterByCategory(category)"
+    >
       {{ category }}
     </li>
     }
   </ul>
   <div class="menu">
     <app-menu-list
+      (click)="ViewDetails(dish.id)"
       *ngFor="let dish of filteredMenu"
       [dish]="dish"
     ></app-menu-list>

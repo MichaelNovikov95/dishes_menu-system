@@ -17,6 +17,7 @@
 }
 
 .category {
+  background-color: white;
   margin-left: 15px;
   padding: 8px 10px;
   border: 1px solid black;
@@ -32,4 +33,8 @@
 .category:first-child {
   margin-left: 0;
   cursor: pointer;
+}
+
+.active {
+  background-color: var(--main-color);
 }

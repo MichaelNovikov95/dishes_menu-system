@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../../services/data.service';
 
 import { Dish } from '../../../shared/interfaces/menu.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -14,7 +15,7 @@ export class MenuComponent implements OnInit {
   categories: string[] = [];
   choosenCategory: string | null = null;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private router: Router) {}
 
   ngOnInit(): void {
     this.dataService.getMenu().subscribe(
@@ -31,6 +32,7 @@ export class MenuComponent implements OnInit {
 
   filterByCategory(category: string) {
     if (category === this.choosenCategory) {
+      this.choosenCategory = null;
       return (this.filteredMenu = this.menu);
     }
     this.choosenCategory = category;
@@ -38,5 +40,9 @@ export class MenuComponent implements OnInit {
     return (this.filteredMenu = this.menu.filter(
       (dish) => dish.category === this.choosenCategory
     ));
+  }
+
+  ViewDetails(id: string) {
+    this.router.navigate(['/dish', id]);
   }
 }
