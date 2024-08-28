@@ -1,0 +1,28 @@
+.hero {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 700px;
+  margin: 80px auto 0 auto;
+}
+
+.hero_banner {
+  position: relative;
+}
+
+.banner-img {
+  width: 100%;
+}
+
+.banner-button {
+  font-size: 30px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: var(--main-color);
+}
+
+.hero_text-block {
+  margin-top: 70px;
+  text-align: center;
+}

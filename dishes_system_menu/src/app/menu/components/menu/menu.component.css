@@ -1,0 +1,35 @@
+.menu {
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 45px;
+}
+
+.categories {
+  max-width: 800px;
+  border: 1px solid black;
+  border-radius: 8px;
+  margin: 30px auto 0 auto;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.category {
+  margin-left: 15px;
+  padding: 8px 10px;
+  border: 1px solid black;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.category:hover {
+  background-color: var(--main-color);
+  transition: 0.5s;
+}
+
+.category:first-child {
+  margin-left: 0;
+  cursor: pointer;
+}

@@ -5,9 +5,9 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LayoutComponent } from './components/layout/layout.component';
 
-import { DataService } from './services/data.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CartButtonComponent } from './components/cart-button/cart-button.component';
+import { HeroComponent } from './components/hero/hero.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +16,7 @@ import { CartButtonComponent } from './components/cart-button/cart-button.compon
     LayoutComponent,
     NavbarComponent,
     CartButtonComponent,
+    HeroComponent,
   ],
   imports: [CommonModule],
   providers: [],
@@ -25,8 +26,7 @@ import { CartButtonComponent } from './components/cart-button/cart-button.compon
     LayoutComponent,
     NavbarComponent,
     CartButtonComponent,
+    HeroComponent,
   ],
 })
-export class CoreModule {
-  constructor(private DataService: DataService) {}
-}
+export class CoreModule {}

@@ -128,3 +128,11 @@ table {
 :root {
   --main-color: rgb(255, 180, 134);
 }
+
+.btn {
+  font-size: 16px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 5px;
+  cursor: pointer;
+}
