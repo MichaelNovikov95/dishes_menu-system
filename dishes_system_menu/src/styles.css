@@ -127,6 +127,7 @@ table {
 
 :root {
   --main-color: rgb(255, 180, 134);
+  --gray-color: #8080804d;
 }
 
 .btn {

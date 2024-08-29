@@ -1,0 +1,29 @@
+.footer {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 1fr 1fr;
+  justify-items: center;
+  margin-top: 50px;
+  border-top: 1px solid black;
+  padding-top: 15px;
+  padding-bottom: 50px;
+  background-color: var(--gray-color);
+}
+
+.footer_logo-wrapper {
+  width: 100px;
+}
+
+.footer_logo {
+  width: 100%;
+}
+
+.contact_item,
+.location_item {
+  cursor: pointer;
+}
+
+.contact_item:hover,
+.location_item:hover {
+  color: var(--main-color);
+  transition: 0.3s;
+}

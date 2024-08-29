@@ -1,5 +1,5 @@
 <div class="menu_list">
-  <p>{{ dish.name }}</p>
-  <!-- <img [src]="dish.image" [alt]="dish.name" /> -->
-  <p>{{ dish.price | currency }}</p>
+  <p class="menu_list-text">{{ dish.name }}</p>
+  <img class="menu_list-img" src="{{ dish.image }}" alt="{{ dish.name }}" />
+  <p class="menu_list-price">{{ dish.price | currency }}</p>
 </div>

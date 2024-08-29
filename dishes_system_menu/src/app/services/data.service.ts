@@ -9,6 +9,7 @@ import { Dish } from '../shared/interfaces/menu.interface';
 })
 export class DataService {
   private apiUrl = 'http://localhost:3000';
+
   constructor(private http: HttpClient) {}
 
   getMenu(): Observable<Dish[]> {
