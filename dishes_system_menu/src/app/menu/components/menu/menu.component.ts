@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
 
-import { DataService } from '../../../services/data.service';
+import { DataService } from '../../../shared/services/data.service';
 
 import { Dish } from '../../../shared/interfaces/menu.interface';
 import { Router, ActivatedRoute } from '@angular/router';

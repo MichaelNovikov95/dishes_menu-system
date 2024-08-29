@@ -8,6 +8,9 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CartButtonComponent } from './components/cart-button/cart-button.component';
 import { HeroComponent } from './components/hero/hero.component';
+import { RouterModule } from '@angular/router';
+
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,7 @@ import { HeroComponent } from './components/hero/hero.component';
     CartButtonComponent,
     HeroComponent,
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, MatButtonModule],
   providers: [],
   exports: [
     FooterComponent,

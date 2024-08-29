@@ -1,7 +1,18 @@
 <header class="header">
   <div class="logo_button">
-    <img src="/images/sushi_icon.svg" alt="company_logo" />
+    <a [routerLink]="['/']"
+      ><img src="/images/sushi_icon.svg" alt="company_logo"
+    /></a>
   </div>
   <app-navbar></app-navbar>
-  <app-cart-button class="app-cart-button"></app-cart-button>
+  <div class="headers_buttons">
+    <a class="login_icon-wrapper" [routerLink]="['/auth/login']">
+      <img
+        class="login_icon"
+        src="images/user-circle.svg"
+        alt="user-circle.svg"
+      />
+    </a>
+    <app-cart-button class="app-cart-button"></app-cart-button>
+  </div>
 </header>

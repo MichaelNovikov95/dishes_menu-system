@@ -2,11 +2,10 @@
   <ul class="categories">
     @for(category of categories; track category){
     <li
-      class="category"
       [ngClass]="{ active: choosenCategory === category }"
       (click)="filterByCategory(category)"
     >
-      {{ category }}
+      <button mat-button class="category_button">{{ category }}</button>
     </li>
     }
   </ul>

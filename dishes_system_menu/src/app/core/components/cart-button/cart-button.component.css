@@ -1,10 +1,9 @@
 .cart_button {
+  height: 40px;
   position: fixed;
   top: 5px;
   right: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  background-color: white;
 }
 
 .cart_button:hover {
@@ -13,13 +12,8 @@
 }
 
 .cart_img {
+  display: flex;
   margin-left: 5px;
   width: 25px;
   height: 25px;
-}
-
-.cart_text {
-  display: flex;
-  margin: 0;
-  font-size: 16px;
 }

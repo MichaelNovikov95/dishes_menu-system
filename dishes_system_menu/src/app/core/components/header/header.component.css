@@ -15,5 +15,29 @@
 
 .app-cart-button {
   display: flex;
-  justify-content: flex-end;
+}
+
+.login_icon {
+  width: 40px;
+  cursor: pointer;
+  position: absolute;
+  right: 100px;
+  background-color: white;
+  border-radius: 50%;
+}
+.login_icon:hover {
+  background-color: var(--main-color);
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.headers_buttons {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.login_icon-wrapper {
+  display: flex;
+  align-items: center;
 }

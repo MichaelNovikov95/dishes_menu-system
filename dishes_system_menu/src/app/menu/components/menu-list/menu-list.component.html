@@ -1,5 +1,12 @@
-<div class="menu_list">
-  <p class="menu_list-text">{{ dish.name }}</p>
-  <img class="menu_list-img" src="{{ dish.image }}" alt="{{ dish.name }}" />
+<mat-card class="menu_list">
+  <mat-card-title class="menu_list-text">{{ dish.name }}</mat-card-title>
+  <img
+    mat-card-image
+    ngSrc="{{ dish.image }}"
+    alt="{{ dish.name }}"
+    width="200"
+    height="200"
+    priority
+  />
   <p class="menu_list-price">{{ dish.price | currency }}</p>
-</div>
+</mat-card>

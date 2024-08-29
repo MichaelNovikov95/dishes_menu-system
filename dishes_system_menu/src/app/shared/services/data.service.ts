@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Dish } from '../shared/interfaces/menu.interface';
+import { Dish } from '../interfaces/menu.interface';
 
 @Injectable({
   providedIn: 'root',

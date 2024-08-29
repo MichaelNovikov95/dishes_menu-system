@@ -37,4 +37,14 @@
 
 .active {
   background-color: var(--main-color);
+  border-radius: 16px;
+}
+
+.category_button {
+  color: black !important;
+}
+
+.category_button:hover {
+  background-color: rgb(255 180 134 / 30%) !important;
+  transition: 0.2s;
 }
