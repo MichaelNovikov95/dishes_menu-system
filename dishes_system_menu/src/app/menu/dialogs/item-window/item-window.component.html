@@ -1,0 +1,19 @@
+<div class="dialog_header">
+  <h2 mat-dialog-title class="dialog_title">{{ dish?.name }}</h2>
+  <div mat-dialog-actions class="icon_wrapper">
+    <img
+      mat-button
+      (click)="onClose()"
+      class="close_icon"
+      src="images/close-button.svg"
+      alt="close_button"
+    />
+  </div>
+</div>
+<div mat-dialog-content class="dialog_content">
+  <img class="dialog_img" src="{{ dish?.image }}" alt="{{ dish?.name }}" />
+  <div>
+    <p class="dialog_text">{{ dish?.price | currency }}</p>
+    <p class="dialog_text">{{ dish?.description }}</p>
+  </div>
+</div>

@@ -12,7 +12,7 @@
   </ul>
   <div class="menu">
     <app-menu-list
-      (click)="ViewDetails(dish.id)"
+      (click)="openDialog(dish.id)"
       *ngFor="let dish of filteredMenu"
       [dish]="dish"
     ></app-menu-list>

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
+
 import { DataService } from '../../../services/data.service';
 
 import { Dish } from '../../../shared/interfaces/menu.interface';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -15,7 +18,11 @@ export class MenuComponent implements OnInit {
   categories: string[] = [];
   choosenCategory: string | null = null;
 
-  constructor(private dataService: DataService, private router: Router) {}
+  constructor(
+    private dataService: DataService,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.dataService.getMenu().subscribe(
@@ -42,7 +49,10 @@ export class MenuComponent implements OnInit {
     ));
   }
 
-  ViewDetails(id: string) {
-    this.router.navigate(['/dish', id]);
+  openDialog(id: string): void {
+    const dialogRef = this.dialog.open(ItemWindowComponent, {
+      width: '1100px',
+      data: { id },
+    });
   }
 }
