@@ -1,31 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
 
 import { DataService } from '../../../shared/services/data.service';
 
 import { Dish } from '../../../shared/interfaces/menu.interface';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css',
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   menu: Dish[] = [];
   filteredMenu: Dish[] = [];
   categories: string[] = [];
   choosenCategory: string | null = null;
 
-  constructor(
-    private dataService: DataService,
-    private router: Router,
-    public dialog: MatDialog
-  ) {}
+  private subscription!: Subscription;
+
+  constructor(private dataService: DataService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.dataService.getMenu().subscribe(
+    this.subscription = this.dataService.getMenu().subscribe(
       (data) => {
         this.menu = data;
         this.filteredMenu = this.menu;
@@ -34,7 +32,7 @@ export class MenuComponent implements OnInit {
         );
       },
       (error) => console.log('Fetch error', error)
-    ).unsubscribe;
+    );
   }
 
   filterByCategory(category: string) {
@@ -54,5 +52,9 @@ export class MenuComponent implements OnInit {
       width: '1100px',
       data: { id },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

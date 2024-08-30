@@ -1,17 +1,20 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { DataService } from '../../../shared/services/data.service';
 import { Dish } from '../../../shared/interfaces/menu.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-item-window',
   templateUrl: './item-window.component.html',
   styleUrl: './item-window.component.css',
 })
-export class ItemWindowComponent implements OnInit {
+export class ItemWindowComponent implements OnInit, OnDestroy {
   dish: Dish | undefined;
   id: string | undefined;
+
+  private subscription!: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<ItemWindowComponent>,
@@ -23,13 +26,17 @@ export class ItemWindowComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.id) {
-      this.dataService.getMenu().subscribe((data) => {
+      this.subscription = this.dataService.getMenu().subscribe((data) => {
         this.dish = data.find((dish: Dish) => dish.id === this.id);
-      }).unsubscribe;
+      });
     }
   }
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
