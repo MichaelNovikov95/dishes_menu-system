@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
-
-import { DataService } from '../../../shared/services/data.service';
-
-import { Dish } from '../../../shared/interfaces/menu.interface';
 import { Subscription } from 'rxjs';
+
+import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
+import { DataService } from '../../../shared/services/data.service';
+import { Dish } from '../../../shared/interfaces/menu.interface';
 
 @Component({
   selector: 'app-menu',
@@ -45,6 +44,24 @@ export class MenuComponent implements OnInit, OnDestroy {
     return (this.filteredMenu = this.menu.filter(
       (dish) => dish.category === this.choosenCategory
     ));
+  }
+
+  searchDish(value: string) {
+    const displayedFilteredDishes = this.menu.filter(
+      (dish) => dish.category === this.choosenCategory
+    );
+
+    if (this.choosenCategory === null && value === '') {
+      return (this.filteredMenu = this.menu);
+    } else if (this.choosenCategory === null && value !== '') {
+      return (this.filteredMenu = this.menu.filter((dish) =>
+        dish.name.toLowerCase().includes(value.toLowerCase())
+      ));
+    } else {
+      return (this.filteredMenu = displayedFilteredDishes.filter((dish) =>
+        dish.name.toLowerCase().includes(value.toLowerCase())
+      ));
+    }
   }
 
   openDialog(id: string): void {

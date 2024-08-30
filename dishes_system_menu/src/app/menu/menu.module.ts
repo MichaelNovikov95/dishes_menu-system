@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MenuRoutingModule } from './menu-routing.module';
 import { MenuComponent } from './components/menu/menu.component';
@@ -10,6 +11,7 @@ import { ItemWindowComponent } from './dialogs/item-window/item-window.component
 import { ItemAdministrationComponent } from './dialogs/item-administration/item-administration.component';
 import { MainComponent } from './pages/main/main.component';
 import { CoreModule } from '../core/core.module';
+import { SearcherComponent } from './components/searcher/searcher.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,7 @@ import { CoreModule } from '../core/core.module';
     ItemWindowComponent,
     ItemAdministrationComponent,
     MainComponent,
+    SearcherComponent,
   ],
   imports: [
     CommonModule,
@@ -26,6 +29,7 @@ import { CoreModule } from '../core/core.module';
     NgOptimizedImage,
     MatCardModule,
     MatButtonModule,
+    ReactiveFormsModule,
   ],
   exports: [MenuComponent],
 })

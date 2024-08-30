@@ -9,6 +9,7 @@
     </li>
     }
   </ul>
+  <app-searcher (searchValue)="searchDish($event)"></app-searcher>
   <div class="menu">
     <app-menu-list
       (click)="openDialog(dish.id)"
