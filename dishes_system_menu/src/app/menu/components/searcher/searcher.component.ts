@@ -1,28 +1,39 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { Output, EventEmitter } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-searcher',
   templateUrl: './searcher.component.html',
   styleUrl: './searcher.component.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SearcherComponent),
+      multi: true,
+    },
+  ],
 })
-export class SearcherComponent implements OnInit, OnDestroy {
-  @Output() searchValue = new EventEmitter<string>();
+export class SearcherComponent implements ControlValueAccessor {
+  public searcher: string = '';
 
-  searchForm = new FormGroup({
-    searcher: new FormControl(''),
-  });
-  private subscription!: Subscription;
+  private onChange!: (value: string) => void;
+  private onTouched!: () => void;
 
-  ngOnInit(): void {
-    this.subscription = this.searchForm.valueChanges.subscribe((v) => {
-      this.searchValue.emit(v.searcher!);
-    });
+  writeValue(value: string): void {
+    this.searcher = value;
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  onInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searcher = input.value;
+    this.onChange(this.searcher);
   }
 }

@@ -8,11 +8,27 @@ import { Dish } from '../interfaces/menu.interface';
   providedIn: 'root',
 })
 export class DataService {
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = import.meta.env.NG_APP_API_URL;
 
   constructor(private http: HttpClient) {}
 
   getMenu(): Observable<Dish[]> {
     return this.http.get<Dish[]>(`${this.apiUrl}/menu`);
+  }
+
+  filterMenuByCategory(categories: string[]): Observable<Dish[]> {
+    let params = { category: categories };
+
+    return this.http.get<Dish[]>(`${this.apiUrl}/menu`, { params });
+  }
+
+  filterMenuByName(dish: string, categories?: string[]): Observable<Dish[]> {
+    let params: any = { name: dish };
+
+    if (categories) {
+      params.category = categories;
+    }
+
+    return this.http.get<Dish[]>(`${this.apiUrl}/menu`, { params });
   }
 }

@@ -1,6 +1,11 @@
 <div class="search_bar">
   <h3>Search what you want today!</h3>
-  <form appearance="outline" [formGroup]="searchForm">
-    <input formControlName="searcher" class="searcher_filter" type="text" />
-  </form>
+  <div appearance="outline">
+    <input
+      [value]="searcher"
+      (input)="onInputChange($event)"
+      class="searcher_filter"
+      type="text"
+    />
+  </div>
 </div>

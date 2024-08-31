@@ -1,20 +1,30 @@
 <section>
   <ul class="categories">
-    @for(category of categories; track category){
+    @for(category of categories$ | async; track category){
     <li
-      [ngClass]="{ active: choosenCategory === category }"
+      [ngClass]="{ active: choosenCategory.includes(category) }"
       (click)="filterByCategory(category)"
     >
       <button mat-button class="category_button">{{ category }}</button>
     </li>
     }
   </ul>
-  <app-searcher (searchValue)="searchDish($event)"></app-searcher>
+  <form [formGroup]="searchForm">
+    <app-searcher formControlName="childControl"></app-searcher>
+  </form>
   <div class="menu">
+    @for(dish of menu$ | async; track dish.id){
     <app-menu-list
       (click)="openDialog(dish.id)"
-      *ngFor="let dish of filteredMenu"
       [dish]="dish"
+      *ngIf="!filteredMenu.length"
     ></app-menu-list>
+    } @for(dish of filteredMenu; track dish.id){
+    <app-menu-list
+      (click)="openDialog(dish.id)"
+      [dish]="dish"
+      *ngIf="filteredMenu.length > 0"
+    ></app-menu-list>
+    }
   </div>
 </section>
