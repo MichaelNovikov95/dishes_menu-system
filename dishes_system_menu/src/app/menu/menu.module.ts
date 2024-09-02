@@ -3,6 +3,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { MenuRoutingModule } from './menu-routing.module';
 import { MenuComponent } from './components/menu/menu.component';
@@ -30,6 +31,7 @@ import { SearcherComponent } from './components/searcher/searcher.component';
     MatCardModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatChipsModule,
   ],
   exports: [MenuComponent],
 })

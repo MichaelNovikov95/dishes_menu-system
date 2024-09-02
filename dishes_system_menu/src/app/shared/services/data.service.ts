@@ -12,23 +12,16 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  getMenu(): Observable<Dish[]> {
-    return this.http.get<Dish[]>(`${this.apiUrl}/menu`);
-  }
-
-  filterMenuByCategory(categories: string[]): Observable<Dish[]> {
-    let params = { category: categories };
-
-    return this.http.get<Dish[]>(`${this.apiUrl}/menu`, { params });
-  }
-
-  filterMenuByName(dish: string, categories?: string[]): Observable<Dish[]> {
-    let params: any = { name: dish };
+  getMenu(dish?: string, categories?: string[]): Observable<Dish[]> {
+    let params: any = {};
 
     if (categories) {
       params.category = categories;
     }
 
+    if (dish) {
+      params.name = dish;
+    }
     return this.http.get<Dish[]>(`${this.apiUrl}/menu`, { params });
   }
 }

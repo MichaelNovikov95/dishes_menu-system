@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, debounceTime, map, of, take } from 'rxjs';
+
+import { Observable, Subscription, debounceTime, map, of, take } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
@@ -14,12 +15,13 @@ import { WordNormalizer } from '../../../shared/pipes/word_normalizer.pipe';
   styleUrl: './menu.component.css',
   providers: [WordNormalizer],
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   public menu$: Observable<Dish[]> = of([]);
   public filteredMenu: Dish[] = [];
   public categories$: Observable<string[]> = of([]);
   public choosenCategory: string[] = [];
   public searchForm: FormGroup;
+  private subscription!: Subscription;
 
   constructor(
     private dataService: DataService,
@@ -51,8 +53,8 @@ export class MenuComponent implements OnInit {
       ?.valueChanges.pipe(debounceTime(500))
       .subscribe((dish_name) => {
         const normalizedDishName = this.wordNormalizer.transform(dish_name);
-        this.dataService
-          .filterMenuByName(normalizedDishName, this.choosenCategory)
+        this.subscription = this.dataService
+          .getMenu(normalizedDishName, this.choosenCategory)
           .pipe(take(1))
           .subscribe((data) => (this.filteredMenu = data));
       });
@@ -65,8 +67,8 @@ export class MenuComponent implements OnInit {
       this.choosenCategory.push(category);
     }
 
-    this.dataService
-      .filterMenuByCategory(this.choosenCategory)
+    this.subscription = this.dataService
+      .getMenu('', this.choosenCategory)
       .pipe(take(1))
       .subscribe((data) => (this.filteredMenu = data));
   }
@@ -76,5 +78,11 @@ export class MenuComponent implements OnInit {
       width: '1100px',
       data: { id },
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

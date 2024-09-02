@@ -35,7 +35,7 @@
   cursor: pointer;
 }
 
-.active {
+.selected {
   background-color: var(--main-color);
   border-radius: 16px;
 }
