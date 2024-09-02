@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription, debounceTime, map, of, take } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
 import { DataService } from '../../../shared/services/data.service';
@@ -20,6 +20,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   public categories$: Observable<string[]> = of([]);
   public choosenCategory: string[] = [];
   public searchForm: FormGroup;
+  public categoriesForm: FormGroup;
   private subscription!: Subscription;
 
   constructor(
@@ -30,6 +31,10 @@ export class MenuComponent implements OnInit, OnDestroy {
   ) {
     this.searchForm = this.fb.group({
       childControl: [''],
+    });
+
+    this.categoriesForm = this.fb.group({
+      categories: this.fb.array([this.fb.control(false)]),
     });
   }
 
@@ -55,15 +60,11 @@ export class MenuComponent implements OnInit, OnDestroy {
       });
   }
 
-  public filterByCategory(category: string) {
-    if (this.choosenCategory.includes(category)) {
-      this.choosenCategory.splice(this.choosenCategory.indexOf(category), 1);
-    } else {
-      this.choosenCategory.push(category);
-    }
+  public filterByCategory(categories: string[]) {
+    this.choosenCategory = categories;
 
     this.getFilteredMenu(
-      this.choosenCategory,
+      categories,
       this.searchForm.get('childControl')?.value
     );
   }
@@ -72,7 +73,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     const normalizedDishName = this.wordNormalizer.transform(dish);
 
     this.subscription = this.subscription = this.dataService
-      .getMenu(this.choosenCategory, normalizedDishName)
+      .getMenu(categories, normalizedDishName)
       .pipe(take(1))
       .subscribe((data) => (this.filteredMenu = data));
   }

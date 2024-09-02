@@ -13,6 +13,7 @@ import { ItemAdministrationComponent } from './dialogs/item-administration/item-
 import { MainComponent } from './pages/main/main.component';
 import { CoreModule } from '../core/core.module';
 import { SearcherComponent } from './components/searcher/searcher.component';
+import { CategoriesComponent } from './components/categories/categories.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { SearcherComponent } from './components/searcher/searcher.component';
     ItemAdministrationComponent,
     MainComponent,
     SearcherComponent,
+    CategoriesComponent,
   ],
   imports: [
     CommonModule,

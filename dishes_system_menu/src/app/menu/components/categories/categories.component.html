@@ -1,0 +1,8 @@
+<form [formGroup]="form">
+  <div formArrayName="selectedCategories">
+    <label *ngFor="let category of categories$ | async; let i = index">
+      <input type="checkbox" [formControlName]="i" />
+      {{ category }}
+    </label>
+  </div>
+</form>

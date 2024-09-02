@@ -1,14 +1,10 @@
 <section>
-  <ul class="categories">
-    @for(category of categories$ | async; track category){
-    <li
-      [ngClass]="{ active: choosenCategory.includes(category) }"
-      (click)="filterByCategory(category)"
-    >
-      <button mat-button class="category_button">{{ category }}</button>
-    </li>
-    }
-  </ul>
+  <div class="categories">
+    <app-categories
+      [categories$]="categories$"
+      (sendSelectedCategories)="filterByCategory($event)"
+    ></app-categories>
+  </div>
 
   <form [formGroup]="searchForm">
     <app-searcher formControlName="childControl"></app-searcher>
