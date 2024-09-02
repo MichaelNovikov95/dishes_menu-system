@@ -12,7 +12,7 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  getMenu(dish?: string, categories?: string[]): Observable<Dish[]> {
+  getMenu(categories?: string[], dish?: string): Observable<Dish[]> {
     let params: any = {};
 
     if (categories) {
@@ -20,7 +20,7 @@ export class DataService {
     }
 
     if (dish) {
-      params.name = dish;
+      params.name_like = dish;
     }
     return this.http.get<Dish[]>(`${this.apiUrl}/menu`, { params });
   }

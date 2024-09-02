@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-
 import { Observable, Subscription, debounceTime, map, of, take } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -52,11 +51,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       .get('childControl')
       ?.valueChanges.pipe(debounceTime(500))
       .subscribe((dish_name) => {
-        const normalizedDishName = this.wordNormalizer.transform(dish_name);
-        this.subscription = this.dataService
-          .getMenu(normalizedDishName, this.choosenCategory)
-          .pipe(take(1))
-          .subscribe((data) => (this.filteredMenu = data));
+        this.getFilteredMenu(this.choosenCategory, dish_name);
       });
   }
 
@@ -67,8 +62,17 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.choosenCategory.push(category);
     }
 
-    this.subscription = this.dataService
-      .getMenu('', this.choosenCategory)
+    this.getFilteredMenu(
+      this.choosenCategory,
+      this.searchForm.get('childControl')?.value
+    );
+  }
+
+  private getFilteredMenu(categories?: string[], dish?: string): void {
+    const normalizedDishName = this.wordNormalizer.transform(dish);
+
+    this.subscription = this.subscription = this.dataService
+      .getMenu(this.choosenCategory, normalizedDishName)
       .pipe(take(1))
       .subscribe((data) => (this.filteredMenu = data));
   }
