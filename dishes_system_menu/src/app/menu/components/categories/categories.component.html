@@ -2,7 +2,7 @@
   <div formArrayName="selectedCategories">
     <label
       class="category_item"
-      *ngFor="let category of categories$ | async; let i = index"
+      *ngFor="let category of categories; let i = index"
       [ngClass]="{ active: form.get('selectedCategories')?.value[i] }"
     >
       <input class="category_input" type="checkbox" [formControlName]="i" />

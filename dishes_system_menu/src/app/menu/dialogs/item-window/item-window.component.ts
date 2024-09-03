@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { DataService } from '../../../shared/services/data.service';
 import { Dish } from '../../../shared/interfaces/menu.interface';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-item-window',
@@ -26,9 +26,12 @@ export class ItemWindowComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.id) {
-      this.subscription = this.dataService.getMenu().subscribe((data) => {
-        this.dish = data.find((dish: Dish) => dish.id === this.id);
-      });
+      this.subscription = this.dataService
+        .getMenu()
+        .pipe(take(1))
+        .subscribe((data) => {
+          this.dish = data.find((dish: Dish) => dish.id === this.id);
+        });
     }
   }
 
@@ -37,6 +40,8 @@ export class ItemWindowComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

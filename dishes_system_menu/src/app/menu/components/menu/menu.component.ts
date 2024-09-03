@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subscription, debounceTime, map, of, take } from 'rxjs';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Observable, Subscription, debounceTime, of, take } from 'rxjs';
+import { FormControl, Validators } from '@angular/forms';
 
 import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
 import { DataService } from '../../../shared/services/data.service';
@@ -17,65 +17,52 @@ import { WordNormalizer } from '../../../shared/pipes/word_normalizer.pipe';
 export class MenuComponent implements OnInit, OnDestroy {
   public menu$: Observable<Dish[]> = of([]);
   public filteredMenu: Dish[] = [];
-  public categories$: Observable<string[]> = of([]);
+  public categories: string[] = [
+    'Cold starters',
+    'Warm Starters',
+    'Sashimi',
+    'Hosomaki',
+    'Traditionall Rolls',
+    'Hot Dishes',
+  ];
   public choosenCategory: string[] = [];
-  public searchForm: FormGroup;
-  public categoriesForm: FormGroup;
+  public searcher = new FormControl('', [Validators.minLength(3)]);
   private subscription!: Subscription;
 
   constructor(
     private dataService: DataService,
     public dialog: MatDialog,
-    private fb: FormBuilder,
     private wordNormalizer: WordNormalizer
-  ) {
-    this.searchForm = this.fb.group({
-      childControl: [''],
-    });
-
-    this.categoriesForm = this.fb.group({
-      categories: this.fb.array([this.fb.control(false)]),
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.menu$ = this.dataService.getMenu();
 
-    this.categories$ = this.menu$.pipe(
-      map((data: Dish[]) =>
-        data.reduce<string[]>((acc, dish) => {
-          if (!acc.includes(dish.category)) {
-            acc.push(dish.category);
-          }
-          return acc;
-        }, [])
-      )
-    );
-
-    this.searchForm
-      .get('childControl')
-      ?.valueChanges.pipe(debounceTime(500))
-      .subscribe((dish_name) => {
-        this.getFilteredMenu(this.choosenCategory, dish_name);
+    this.subscription = this.searcher.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe(() => {
+        if (this.searcher.valid || !this.searcher.value?.length) {
+          this.getFilteredMenu();
+        }
       });
   }
 
   public filterByCategory(categories: string[]) {
     this.choosenCategory = categories;
-
-    this.getFilteredMenu(
-      categories,
-      this.searchForm.get('childControl')?.value
-    );
+    this.getFilteredMenu();
   }
 
-  private getFilteredMenu(categories?: string[], dish?: string): void {
-    const normalizedDishName = this.wordNormalizer.transform(dish);
+  private getFilteredMenu(): void {
+    const normalizedDishName = this.wordNormalizer.transform(
+      this.searcher.value
+    );
 
-    this.subscription = this.subscription = this.dataService
-      .getMenu(categories, normalizedDishName)
+    this.subscription = this.dataService
+      .getMenu(this.choosenCategory, normalizedDishName)
       .pipe(take(1))
-      .subscribe((data) => (this.filteredMenu = data));
+      .subscribe((data) => {
+        this.filteredMenu = data;
+      });
   }
 
   public openDialog(id: string): void {

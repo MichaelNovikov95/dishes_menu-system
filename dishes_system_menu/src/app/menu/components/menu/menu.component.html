@@ -1,13 +1,13 @@
 <section>
   <div class="categories">
     <app-categories
-      [categories$]="categories$"
+      [categories]="categories"
       (sendSelectedCategories)="filterByCategory($event)"
     ></app-categories>
   </div>
 
-  <form [formGroup]="searchForm">
-    <app-searcher formControlName="childControl"></app-searcher>
+  <form>
+    <app-searcher [formControl]="searcher"></app-searcher>
   </form>
 
   <div class="menu">

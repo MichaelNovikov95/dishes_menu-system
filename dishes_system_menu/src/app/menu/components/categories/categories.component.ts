@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable, Subscription, of, take } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-categories',
@@ -15,12 +15,11 @@ import { Observable, Subscription, of, take } from 'rxjs';
   styleUrl: './categories.component.css',
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
-  @Input() categories$: Observable<string[]> = of([]);
+  @Input() categories: string[] = [];
   @Output() sendSelectedCategories = new EventEmitter<string[]>();
 
   public form: FormGroup;
   private subscription!: Subscription;
-  private _categories: string[] = [];
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -29,13 +28,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.categories$.pipe(take(1)).subscribe((cat) => {
-      this._categories = cat;
-      this.setCategories(cat);
-    });
+    this.setCategories(this.categories);
 
-    this.form.valueChanges.subscribe(() => {
-      const selectedCategories = this._categories
+    this.subscription = this.form.valueChanges.subscribe(() => {
+      const selectedCategories = this.categories
         .filter((_, index) => this.form.get('selectedCategories')?.value[index])
         .filter((category) => category !== null);
 

@@ -15,6 +15,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class SearcherComponent implements ControlValueAccessor {
   public searcher: string = '';
+  public errorMsg: string | null = null;
 
   private onChange!: (value: string) => void;
   private onTouched!: () => void;
@@ -34,6 +35,7 @@ export class SearcherComponent implements ControlValueAccessor {
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searcher = input.value;
+
     this.onChange(this.searcher);
   }
 }
