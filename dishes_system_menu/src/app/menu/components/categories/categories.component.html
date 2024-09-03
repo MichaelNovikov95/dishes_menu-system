@@ -1,7 +1,11 @@
 <form [formGroup]="form">
   <div formArrayName="selectedCategories">
-    <label *ngFor="let category of categories$ | async; let i = index">
-      <input type="checkbox" [formControlName]="i" />
+    <label
+      class="category_item"
+      *ngFor="let category of categories$ | async; let i = index"
+      [ngClass]="{ active: form.get('selectedCategories')?.value[i] }"
+    >
+      <input class="category_input" type="checkbox" [formControlName]="i" />
       {{ category }}
     </label>
   </div>

@@ -1,0 +1,29 @@
+.category_input {
+  display: none;
+}
+
+.category_item {
+  cursor: pointer;
+  margin-right: 15px;
+  padding: 5px 5px 5px 10px;
+  border-radius: 16px;
+}
+
+.active {
+  background-color: var(--main-color);
+  border-radius: 16px;
+}
+
+.category_item.active:hover {
+  background-color: var(--main-color) !important;
+  border-radius: 16px;
+}
+
+.category_item:hover {
+  background-color: rgb(255 180 134 / 30%) !important;
+  transition: 0.2s;
+}
+
+.category_item:last-child {
+  margin-right: 0;
+}
