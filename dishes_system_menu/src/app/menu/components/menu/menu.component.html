@@ -28,5 +28,9 @@
     ></app-menu-list>
 
     }
+
+    <div *ngIf="!filteredMenu.length && choosenCategory.length">
+      <p>Sorry, no match found. Try to find something else</p>
+    </div>
   </div>
 </section>

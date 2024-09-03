@@ -38,7 +38,6 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       const selectedCategories = this._categories
         .filter((_, index) => this.form.get('selectedCategories')?.value[index])
         .filter((category) => category !== null);
-      console.log(selectedCategories);
 
       this.sendSelectedCategories.emit(selectedCategories);
     });
