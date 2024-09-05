@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-categories',
@@ -17,36 +17,28 @@ import { Subscription } from 'rxjs';
 export class CategoriesComponent implements OnInit, OnDestroy {
   @Input() categories: string[] = [];
   @Output() sendSelectedCategories = new EventEmitter<string[]>();
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
-  public form: FormGroup;
-  private subscription!: Subscription;
+  public form: FormGroup = new FormGroup({});
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      selectedCategories: this.fb.array([]),
-    });
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.setCategories(this.categories);
+    this.form = this.fb.group({
+      selectedCategories: this.fb.array(this.categories.map(() => false)),
+    });
 
-    this.subscription = this.form.valueChanges.subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       const selectedCategories = this.categories
-        .filter((_, index) => this.form.get('selectedCategories')?.value[index])
-        .filter((category) => category !== null);
+        .filter((_, index) => value.selectedCategories[index])
+        .filter(Boolean);
 
       this.sendSelectedCategories.emit(selectedCategories);
     });
   }
 
-  setCategories(categories: string[]): void {
-    const formArray = this.fb.array(categories.map(() => false));
-    this.form.setControl('selectedCategories', formArray);
-  }
-
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

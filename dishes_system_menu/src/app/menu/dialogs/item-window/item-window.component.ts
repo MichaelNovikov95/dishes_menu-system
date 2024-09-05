@@ -1,47 +1,70 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { take } from 'rxjs';
 
-import { DataService } from '../../../shared/services/data.service';
+import { MenuService } from '../../../shared/services/menu/menu.service';
 import { Dish } from '../../../shared/interfaces/menu.interface';
-import { Subscription, take } from 'rxjs';
+import { DishWindowComponent } from '../dish-window/dish-window.component';
+import { AuthService } from '../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-item-window',
   templateUrl: './item-window.component.html',
   styleUrl: './item-window.component.css',
 })
-export class ItemWindowComponent implements OnInit, OnDestroy {
+export class ItemWindowComponent implements OnInit {
   dish: Dish | undefined;
   id: string | undefined;
-
-  private subscription!: Subscription;
+  public userRoles: string[] | undefined = undefined;
 
   constructor(
     public dialogRef: MatDialogRef<ItemWindowComponent>,
-    private dataService: DataService,
+    private menuService: MenuService,
+    private authService: AuthService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: { id: string }
   ) {
     this.id = data.id;
+    this.authService.currentUser.subscribe((v) => (this.userRoles = v?.roles));
   }
 
   ngOnInit(): void {
     if (this.id) {
-      this.subscription = this.dataService
-        .getMenu()
+      this.menuService
+        .getDishById(this.id)
         .pipe(take(1))
-        .subscribe((data) => {
-          this.dish = data.find((dish: Dish) => dish.id === this.id);
-        });
+        .subscribe((dish) => (this.dish = dish));
     }
   }
 
-  onClose(): void {
+  public updateDish(id: string) {
+    this.openDishDialog(id);
+  }
+
+  public deleteDish(id: string) {
+    this.menuService
+      .deleteDishById(id)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          console.log('Dish deleted successfully');
+        },
+        error: (err) => {
+          console.error('Error deleting dish:', err);
+        },
+      });
+    this.itemWindowClose();
+  }
+
+  public itemWindowClose(): void {
     this.dialogRef.close();
   }
 
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  private openDishDialog(id?: string) {
+    this.dialog.open(DishWindowComponent, {
+      width: '1000px',
+      data: { id },
+    });
   }
 }

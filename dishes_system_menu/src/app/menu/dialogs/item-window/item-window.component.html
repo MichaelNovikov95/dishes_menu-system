@@ -3,7 +3,7 @@
   <div mat-dialog-actions class="icon_wrapper">
     <img
       mat-button
-      (click)="onClose()"
+      (click)="itemWindowClose()"
       class="close_icon"
       ngSrc="images/close-button.svg"
       alt="close_button"
@@ -17,5 +17,9 @@
   <div>
     <p class="dialog_text">{{ dish?.price | currency }}</p>
     <p class="dialog_text">{{ dish?.description }}</p>
+    <div *ngIf="this.userRoles?.includes('admin')">
+      <button (click)="updateDish(dish?.id!)">Update</button>
+      <button (click)="deleteDish(dish?.id!)">Delete</button>
+    </div>
   </div>
 </div>

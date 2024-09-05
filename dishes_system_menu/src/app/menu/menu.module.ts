@@ -9,21 +9,23 @@ import { MenuRoutingModule } from './menu-routing.module';
 import { MenuComponent } from './components/menu/menu.component';
 import { MenuListComponent } from './components/menu-list/menu-list.component';
 import { ItemWindowComponent } from './dialogs/item-window/item-window.component';
-import { ItemAdministrationComponent } from './dialogs/item-administration/item-administration.component';
 import { MainComponent } from './pages/main/main.component';
 import { CoreModule } from '../core/core.module';
 import { SearcherComponent } from './components/searcher/searcher.component';
 import { CategoriesComponent } from './components/categories/categories.component';
+import { DishWindowComponent } from './dialogs/dish-window/dish-window.component';
+import { DishFormComponent } from './components/dish-form/dish-form.component';
 
 @NgModule({
   declarations: [
     MenuComponent,
     MenuListComponent,
     ItemWindowComponent,
-    ItemAdministrationComponent,
     MainComponent,
     SearcherComponent,
     CategoriesComponent,
+    DishWindowComponent,
+    DishFormComponent,
   ],
   imports: [
     CommonModule,

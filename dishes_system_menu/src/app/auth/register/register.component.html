@@ -1,11 +1,11 @@
 <div class="auth_wrapper">
-  <div class="auth_form">
+  <form class="auth_form" [formGroup]="userForm" (ngSubmit)="register()">
     <h3>Register</h3>
-    <mat-form-field [formGroup]="userForm">
+    <mat-form-field>
       <mat-label for="username">Username:</mat-label>
       <input matInput id="username" type="text" formControlName="username" />
     </mat-form-field>
-    <mat-form-field [formGroup]="userForm">
+    <mat-form-field>
       <mat-label for="password">Password:</mat-label>
       <input
         matInput
@@ -14,8 +14,8 @@
         formControlName="password"
       />
     </mat-form-field>
-    <button mat-flat-button (ngSubmit)="register()">Sign up</button>
-  </div>
+    <button mat-flat-button>Sign up</button>
+  </form>
   <a class="auth_redirect_button" [routerLink]="['/auth/login']"
     ><button mat-stroked-button>Login</button></a
   >

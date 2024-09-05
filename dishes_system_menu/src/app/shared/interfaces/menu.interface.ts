@@ -1,9 +1,9 @@
 export interface Dish {
-  id: string;
+  id?: string;
   name: string;
   price: number;
-  image: string;
+  image?: string | File;
   category: string;
-  description: string;
+  description?: string;
   featured: boolean;
 }

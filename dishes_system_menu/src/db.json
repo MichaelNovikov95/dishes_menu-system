@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "Sashimi salad",
-      "price": 12.0,
+      "price": 12,
       "image": "images/dishes/sashimi_salad.jpg",
       "category": "Cold starters",
       "description": "Organic greens topped with market fresh sashimi, wasabi soy vinaigrette.",
@@ -12,7 +12,7 @@
     {
       "id": 2,
       "name": "Chirashi sushi",
-      "price": 21.0,
+      "price": 21,
       "image": "images/dishes/Chirashi sushi.jpeg",
       "category": "Cold starters",
       "description": "Sushi bar variety with sushi rice.",
@@ -21,7 +21,7 @@
     {
       "id": 3,
       "name": "Seaweed salad",
-      "price": 17.0,
+      "price": 17,
       "image": "images/dishes/Seaweed salad.jpg",
       "category": "Cold starters",
       "description": "A nice seaweed salad.",
@@ -30,7 +30,7 @@
     {
       "id": 4,
       "name": "Edamame",
-      "price": 4.0,
+      "price": 4,
       "image": "images/dishes/Edamame.jpg",
       "category": "Warm Starters",
       "description": "Boiled soy beans with salt ",
@@ -39,7 +39,7 @@
     {
       "id": 5,
       "name": "Miso soup",
-      "price": 4.0,
+      "price": 4,
       "image": "images/dishes/Miso soup.jpg",
       "category": "Warm Starters",
       "description": "Soy bean soup with Wacame seaweed, tofu and spring onion.",
@@ -57,7 +57,7 @@
     {
       "id": 7,
       "name": "Shake",
-      "price": 10.0,
+      "price": 10,
       "image": "images/dishes/Shake.jpg",
       "category": "Sashimi",
       "description": "With vanilla, chocolate or strawberry flavor!",
@@ -75,7 +75,7 @@
     {
       "id": 9,
       "name": "Tekka maki",
-      "price": 6.0,
+      "price": 6,
       "image": "images/dishes/Tekka maki.jpg",
       "category": "Hosomaki",
       "description": "Tuna roll with wasabi. - 6 pieces",
@@ -84,7 +84,7 @@
     {
       "id": 10,
       "name": "Hosomaki Mix",
-      "price": 17.0,
+      "price": 17,
       "image": "images/dishes/Hosomaki Mix.jpg",
       "category": "Hosomaki",
       "description": "18 pieces.",
@@ -102,7 +102,7 @@
     {
       "id": 12,
       "name": "Seattle rolls",
-      "price": 8.0,
+      "price": 8,
       "image": "images/dishes/Seattle rolls.jpeg",
       "category": "Traditionall Rolls",
       "description": "Smoked salmon. Cucumber. Cream cheese.",
@@ -111,7 +111,7 @@
     {
       "id": 13,
       "name": "Spicy Tuna rolls",
-      "price": 6.0,
+      "price": 6,
       "image": "images/dishes/Spicy Tuna rolls.jpg",
       "category": "Traditionall Rolls",
       "description": "Spicy tuna, spring onion and avocado. - 6 pieces",
@@ -120,7 +120,7 @@
     {
       "id": 14,
       "name": "Ebi rolls",
-      "price": 8.0,
+      "price": 8,
       "image": "images/dishes/Ebi rolls.jpg",
       "category": "Traditionall Rolls",
       "description": "King prawns, avocado and asparagus. - 8 pieces",
@@ -129,7 +129,7 @@
     {
       "id": 15,
       "name": "Chicken Teriyaki",
-      "price": 12.0,
+      "price": 12,
       "image": "images/dishes/Chicken Teriyaki.jpg",
       "category": "Hot Dishes",
       "description": "Sauted chicken with teiyaki sauce.",
@@ -147,7 +147,7 @@
     {
       "id": 17,
       "name": "Gohan",
-      "price": 3.0,
+      "price": 3,
       "image": "images/dishes/Gohan.jpg",
       "category": "Hot Dishes",
       "description": "Steamed rice.",
@@ -156,7 +156,7 @@
     {
       "id": 18,
       "name": "Tori Katsu",
-      "price": 11.0,
+      "price": 11,
       "image": "images/dishes/Tori Katsu.jpg",
       "category": "Hot Dishes",
       "description": "Pan-fried chicken breast with yasai salad.",
@@ -170,6 +170,29 @@
       "category": "Hot Dishes",
       "description": "Udon noddles with chicken, king prawns and vegetables.",
       "featured": true
+    },
+    {
+      "name": "xxx",
+      "price": 12,
+      "image": "",
+      "category": "Cold starters",
+      "description": "xx",
+      "featured": "true",
+      "id": 20
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "Admin",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "User",
+      "password": "user123",
+      "role": "user"
     }
   ]
 }

@@ -1,0 +1,50 @@
+<form [formGroup]="newDishForm" (ngSubmit)="onSubmit()">
+  <label>
+    Name of dish
+    <input type="text" formControlName="name" />
+  </label>
+  <label>
+    Price
+    <input type="number" formControlName="price" />
+  </label>
+  <label>
+    Choose image
+    <input type="file" (change)="onPhotoSelected($event)" />
+  </label>
+
+  <fieldset>
+    <legend>Categories</legend>
+    <div *ngFor="let category of categories">
+      <input
+        type="radio"
+        [id]="category"
+        [value]="category"
+        formControlName="category"
+      />
+      <label [for]="category">{{ category }}</label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Featured</legend>
+    <div *ngFor="let option of featured">
+      <input
+        type="radio"
+        [id]="option"
+        [value]="option"
+        formControlName="featured"
+      />
+      <label [for]="option">{{ option }}</label>
+    </div>
+  </fieldset>
+
+  <label>
+    Description
+    <textarea formControlName="description"></textarea>
+  </label>
+
+  <button type="submit">
+    <span *ngIf="!id">Create</span>
+    <span *ngIf="id">Update</span>
+  </button>
+</form>

@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subscription, debounceTime, of, take } from 'rxjs';
+import { Subject, debounceTime, filter, take, takeUntil } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 
 import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
-import { DataService } from '../../../shared/services/data.service';
+import { MenuService } from '../../../shared/services/menu/menu.service';
 import { Dish } from '../../../shared/interfaces/menu.interface';
 import { WordNormalizer } from '../../../shared/pipes/word_normalizer.pipe';
+import { CategoriesService } from '../../../shared/services/categories/categories.service';
 
 @Component({
   selector: 'app-menu',
@@ -15,35 +16,38 @@ import { WordNormalizer } from '../../../shared/pipes/word_normalizer.pipe';
   providers: [WordNormalizer],
 })
 export class MenuComponent implements OnInit, OnDestroy {
-  public menu$: Observable<Dish[]> = of([]);
+  public menu: Dish[] = [];
   public filteredMenu: Dish[] = [];
-  public categories: string[] = [
-    'Cold starters',
-    'Warm Starters',
-    'Sashimi',
-    'Hosomaki',
-    'Traditionall Rolls',
-    'Hot Dishes',
-  ];
+  public categories: string[] = [];
   public choosenCategory: string[] = [];
   public searcher = new FormControl('', [Validators.minLength(3)]);
-  private subscription!: Subscription;
+
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    private dataService: DataService,
+    private menuService: MenuService,
     public dialog: MatDialog,
-    private wordNormalizer: WordNormalizer
-  ) {}
+    private wordNormalizer: WordNormalizer,
+    private categoryService: CategoriesService
+  ) {
+    this.categories = categoryService.categories;
+  }
 
   ngOnInit(): void {
-    this.menu$ = this.dataService.getMenu();
+    this.menuService.currentDishes
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((dishes) => {
+        this.menu = dishes;
+      });
 
-    this.subscription = this.searcher.valueChanges
-      .pipe(debounceTime(500))
+    this.searcher.valueChanges
+      .pipe(
+        debounceTime(500),
+        filter(() => this.searcher.valid),
+        takeUntil(this.destroy$)
+      )
       .subscribe(() => {
-        if (this.searcher.valid || !this.searcher.value?.length) {
-          this.getFilteredMenu();
-        }
+        this.getFilteredMenu();
       });
   }
 
@@ -57,24 +61,22 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.searcher.value
     );
 
-    this.subscription = this.dataService
-      .getMenu(this.choosenCategory, normalizedDishName)
-      .pipe(take(1))
-      .subscribe((data) => {
-        this.filteredMenu = data;
-      });
+    this.menuService.getAllDishes(this.choosenCategory, normalizedDishName);
+
+    this.menuService.currentDishes.pipe(take(1)).subscribe((data) => {
+      this.filteredMenu = data;
+    });
   }
 
   public openDialog(id: string): void {
-    const dialogRef = this.dialog.open(ItemWindowComponent, {
+    this.dialog.open(ItemWindowComponent, {
       width: '1100px',
       data: { id },
     });
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
