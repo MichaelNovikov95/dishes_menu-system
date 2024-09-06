@@ -6,7 +6,7 @@ import { take } from 'rxjs';
 import { MenuService } from '../../../shared/services/menu/menu.service';
 import { Dish } from '../../../shared/interfaces/menu.interface';
 import { DishWindowComponent } from '../dish-window/dish-window.component';
-import { AuthService } from '../../../shared/services/auth/auth.service';
+import { AuthService } from '../../../auth/service/auth.service';
 
 @Component({
   selector: 'app-item-window',

@@ -28,7 +28,7 @@ export class MenuService {
       params['name_like'] = dish;
     }
     this.http
-      .get<Dish[]>(`${this.apiUrl}/menu`, { params })
+      .get<Dish[]>(`${this.apiUrl}/api/menu`, { params })
       .pipe(take(1))
       .subscribe((dishes) => {
         this.dishesSubject.next(dishes);
@@ -37,8 +37,8 @@ export class MenuService {
 
   getDishById(id: string): Observable<Dish> {
     return this.http
-      .get<Dish[]>(`${this.apiUrl}/menu?id=${id}`)
-      .pipe(map((dishes) => dishes[0]));
+      .get<Dish>(`${this.apiUrl}/api/menu/${id}`)
+      .pipe(map((dishes) => dishes));
   }
 
   createDish(newDish: Dish): Observable<Dish> {
@@ -46,7 +46,7 @@ export class MenuService {
     headers.set('Content-Type', 'application/json');
 
     return this.http
-      .post<Dish>(`${this.apiUrl}/menu`, newDish, {
+      .post<Dish>(`${this.apiUrl}/api/menu`, newDish, {
         headers: headers,
       })
       .pipe(tap(() => this.getAllDishes()));
@@ -57,7 +57,7 @@ export class MenuService {
     headers.set('Content-Type', 'application/json');
 
     return this.http
-      .put<Dish>(`${this.apiUrl}/menu/${id}`, dish, {
+      .put<Dish>(`${this.apiUrl}/api/menu/${id}`, dish, {
         headers: headers,
       })
       .pipe(tap(() => this.getAllDishes()));
@@ -67,7 +67,7 @@ export class MenuService {
     this.getAllDishes();
 
     return this.http
-      .delete<void>(`${this.apiUrl}/menu/${id}`)
+      .delete<void>(`${this.apiUrl}/api/menu/${id}`)
       .pipe(tap(() => this.getAllDishes()));
   }
 

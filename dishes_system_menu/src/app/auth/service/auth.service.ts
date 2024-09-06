@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { tap } from 'rxjs';
-import { User } from '../../interfaces/user.interface';
+import { User } from '../../shared/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,22 +16,25 @@ export class AuthService {
 
   public login(username: string, password: string): Observable<boolean> {
     const params = { username, password };
-    return this.http.get<User[]>(`${this.apiUrl}/users`, { params }).pipe(
-      map((users) => users[0]),
-      tap((user) => {
-        if (user) {
-          user.roles = user.username === 'Admin' ? ['admin', 'user'] : ['user'];
-          this.currentUserSubject.next(user);
-        }
-      }),
-      map((user) => !!user)
-    );
+    return this.http
+      .get<User[]>(`${this.apiUrl}/api/auth/login`, { params })
+      .pipe(
+        map((users) => users[0]),
+        tap((user) => {
+          if (user) {
+            user.roles =
+              user.username === 'Admin' ? ['admin', 'user'] : ['user'];
+            this.currentUserSubject.next(user);
+          }
+        }),
+        map((user) => !!user)
+      );
   }
 
   register(username: string, password: string): Observable<void> {
     const newUser = { username, password, roles: ['user'] };
     return this.http
-      .post<void>(`${this.apiUrl}/users`, newUser)
+      .post<void>(`${this.apiUrl}/api/auth/registration`, newUser)
       .pipe(tap(() => this.currentUserSubject.next(newUser)));
   }
 

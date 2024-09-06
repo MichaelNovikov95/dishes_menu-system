@@ -1,7 +1,6 @@
 <section>
   <div class="categories">
     <app-categories
-      [categories]="categories"
       (sendSelectedCategories)="filterByCategory($event)"
     ></app-categories>
   </div>
@@ -13,23 +12,10 @@
   <div class="menu">
     @for(dish of menu; track dish.id){
 
-    <app-menu-list
-      (click)="openDialog(dish.id!)"
-      [dish]="dish"
-      *ngIf="!filteredMenu.length && !choosenCategory.length"
-    ></app-menu-list>
-
-    } @for(dish of filteredMenu; track dish.id){
-
-    <app-menu-list
-      (click)="openDialog(dish.id!)"
-      [dish]="dish"
-      *ngIf="filteredMenu.length > 0"
-    ></app-menu-list>
+    <app-menu-list (click)="openDialog(dish.id!)" [dish]="dish"></app-menu-list>
 
     }
-
-    <div *ngIf="!filteredMenu.length && choosenCategory.length">
+    <div *ngIf="!menu.length && choosenCategory.length">
       <p>Sorry, no match found. Try to find something else</p>
     </div>
   </div>

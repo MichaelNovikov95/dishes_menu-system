@@ -1,37 +1,26 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, debounceTime, filter, take, takeUntil } from 'rxjs';
+import { Subject, debounceTime, filter, takeUntil } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 
 import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
 import { MenuService } from '../../../shared/services/menu/menu.service';
 import { Dish } from '../../../shared/interfaces/menu.interface';
-import { WordNormalizer } from '../../../shared/pipes/word_normalizer.pipe';
-import { CategoriesService } from '../../../shared/services/categories/categories.service';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css',
-  providers: [WordNormalizer],
 })
 export class MenuComponent implements OnInit, OnDestroy {
   public menu: Dish[] = [];
   public filteredMenu: Dish[] = [];
-  public categories: string[] = [];
   public choosenCategory: string[] = [];
   public searcher = new FormControl('', [Validators.minLength(3)]);
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(
-    private menuService: MenuService,
-    public dialog: MatDialog,
-    private wordNormalizer: WordNormalizer,
-    private categoryService: CategoriesService
-  ) {
-    this.categories = categoryService.categories;
-  }
+  constructor(private menuService: MenuService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.menuService.currentDishes
@@ -47,25 +36,16 @@ export class MenuComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        this.getFilteredMenu();
+        this.menuService.getAllDishes(
+          this.choosenCategory,
+          this.searcher.value!
+        );
       });
   }
 
   public filterByCategory(categories: string[]) {
     this.choosenCategory = categories;
-    this.getFilteredMenu();
-  }
-
-  private getFilteredMenu(): void {
-    const normalizedDishName = this.wordNormalizer.transform(
-      this.searcher.value
-    );
-
-    this.menuService.getAllDishes(this.choosenCategory, normalizedDishName);
-
-    this.menuService.currentDishes.pipe(take(1)).subscribe((data) => {
-      this.filteredMenu = data;
-    });
+    this.menuService.getAllDishes(this.choosenCategory, this.searcher.value!);
   }
 
   public openDialog(id: string): void {

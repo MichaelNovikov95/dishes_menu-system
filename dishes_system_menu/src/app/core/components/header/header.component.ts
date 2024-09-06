@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DishWindowComponent } from '../../../menu/dialogs/dish-window/dish-window.component';
-import { AuthService } from '../../../shared/services/auth/auth.service';
+import { AuthService } from '../../../auth/service/auth.service';
 
 @Component({
   selector: 'app-header',
