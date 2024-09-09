@@ -7,11 +7,15 @@ const routes: Routes = [
   {
     path: '',
     component: MainComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
-    canActivate: [AuthGuard],
+  },
+  {
+    path: '**',
+    redirectTo: '/auth/login',
   },
 ];
 

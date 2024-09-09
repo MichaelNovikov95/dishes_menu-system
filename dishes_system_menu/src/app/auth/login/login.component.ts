@@ -23,12 +23,15 @@ export class LoginComponent implements OnDestroy {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  login(): void {
+  login() {
     if (this.userForm.valid) {
       this.authService
         .login(this.userForm.value.username!, this.userForm.value.password!)
         .pipe(takeUntil(this.destroy$))
-        .subscribe(() => this.router.navigate(['/']));
+        .subscribe((response) => {
+          this.authService.tokenHandler(response);
+          this.router.navigate(['/']);
+        });
     }
   }
 

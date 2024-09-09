@@ -14,8 +14,18 @@
         formControlName="password"
       />
     </mat-form-field>
+    <mat-form-field>
+      <mat-label for="password">Repeat password:</mat-label>
+      <input
+        matInput
+        id="rep_password"
+        type="password"
+        formControlName="rep_password"
+      />
+    </mat-form-field>
     <button mat-flat-button>Sign up</button>
   </form>
+  <p *ngIf="errorMessage">{{ errorMessage }}</p>
   <a class="auth_redirect_button" [routerLink]="['/auth/login']"
     ><button mat-stroked-button>Login</button></a
   >

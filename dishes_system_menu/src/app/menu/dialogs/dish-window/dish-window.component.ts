@@ -31,8 +31,6 @@ export class DishWindowComponent implements OnInit, OnDestroy {
     this.categoryService.currentCategories
       .pipe(takeUntil(this.destroy$))
       .subscribe((categories) => {
-        console.log(categories);
-
         this.categories = categories;
       });
 
