@@ -6,8 +6,15 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
-import { CategoriesService } from '../../../shared/services/categories/categories.service';
+import { Observable, Subject, of, takeUntil } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+// import { AppState } from '../../../store/categories/reducer/categories.reducer';
+import { getAllCategories } from '../../../store/categories/categories.action';
+import { AppState } from '../../../store/app.state';
+import { selectCategories } from '../../../store/categories/categories.selector';
+// import { selectCategories } from '../../../store/categories/categories.selector';
+// import { loadCateogires } from '../../../store/categories/actions/categories.action';
+// import { CategoriesService } from '../../../shared/services/categories/categories.service';
 
 @Component({
   selector: 'app-categories',
@@ -21,20 +28,19 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   public form: FormGroup = new FormGroup({});
 
-  constructor(
-    private fb: FormBuilder,
-    private categoryService: CategoriesService
-  ) {}
+  constructor(private fb: FormBuilder, private store: Store<AppState>) {
+    // this.store.dispatch(getAllCategories());
+  }
 
   ngOnInit(): void {
-    this.categoryService.currentCategories
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((categories) => {
-        this.categories = categories;
-        if (this.categories.length) {
-          this.initCategoriesForm();
-        }
-      });
+    // this.categoryService.currentCategories
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((categories) => {
+    //     this.categories = categories;
+    //     if (this.categories.length) {
+    //       this.initCategoriesForm();
+    //     }
+    //   });
   }
 
   get formArray() {

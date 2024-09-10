@@ -23,11 +23,11 @@ export class MenuComponent implements OnInit, OnDestroy {
   constructor(private menuService: MenuService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.menuService.currentDishes
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((dishes) => {
-        this.menu = dishes;
-      });
+    // this.menuService.currentDishes
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((dishes) => {
+    //     this.menu = dishes;
+    //   });
 
     this.searcher.valueChanges
       .pipe(
