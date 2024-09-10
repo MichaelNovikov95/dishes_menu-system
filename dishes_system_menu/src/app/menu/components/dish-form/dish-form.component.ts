@@ -1,10 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-
-import { MenuService } from '../../../shared/services/menu/menu.service';
-import { Dish } from '../../../shared/interfaces/menu.interface';
 import { Observable, take } from 'rxjs';
+import { Store } from '@ngrx/store';
+
+import { Dish } from '../../../shared/interfaces/menu.interface';
 import { MatDialog } from '@angular/material/dialog';
+import { AppState } from '../../../store/app.state';
+import {
+  createDish,
+  updateDishById,
+} from '../../../store/dishes/dishes.action';
+import { getAllCategories } from '../../../store/categories/categories.action';
+import { selectCategories } from '../../../store/categories/categories.selector';
 
 @Component({
   selector: 'app-dish-form',
@@ -12,7 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './dish-form.component.css',
 })
 export class DishFormComponent implements OnInit {
-  @Input() categories: string[] = [];
+  public categories$!: Observable<string[]>;
   @Input() recievedDish!: Observable<Dish>;
   @Input() id: string | null = null;
 
@@ -21,9 +28,9 @@ export class DishFormComponent implements OnInit {
   public selectedFile: File | null = null;
 
   constructor(
-    private menuService: MenuService,
     private fb: FormBuilder,
-    private dialogRef: MatDialog
+    private dialogRef: MatDialog,
+    private store: Store<AppState>
   ) {
     this.newDishForm = this.fb.group({
       name: ['', Validators.required],
@@ -36,9 +43,23 @@ export class DishFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(getAllCategories());
+    this.categories$ = this.store.select(selectCategories);
+
     if (this.id) {
       this.recievedDish.pipe(take(1)).subscribe((dish) => {
-        this.newDishForm.patchValue(dish);
+        this.categories$.pipe(take(1)).subscribe((categories) => {
+          const position = dish.categoryId! - 2;
+
+          this.newDishForm.patchValue({
+            name: dish.name,
+            price: dish.price,
+            image: dish.image,
+            category: categories[position],
+            description: dish.description,
+            featured: dish.featured.toString(),
+          });
+        });
       });
     }
   }
@@ -63,30 +84,12 @@ export class DishFormComponent implements OnInit {
   }
 
   private createDish() {
-    this.menuService
-      .createDish(this.newDishForm.value)
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          console.log('Dish created successfully');
-        },
-        error: (err) => {
-          console.error('Error creating dish:', err);
-        },
-      });
+    this.store.dispatch(createDish({ newDish: this.newDishForm.value }));
   }
 
   private updateDish(id: string) {
-    this.menuService
-      .updateDishById(id, this.newDishForm.value)
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          console.log('Dish updated successfully');
-        },
-        error: (err) => {
-          console.error('Error updating dish:', err);
-        },
-      });
+    this.store.dispatch(
+      updateDishById({ id: id, dish: this.newDishForm.value })
+    );
   }
 }

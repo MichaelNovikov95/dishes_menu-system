@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, debounceTime, filter, takeUntil } from 'rxjs';
+import { Observable, Subject, debounceTime, filter, takeUntil } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 
 import { ItemWindowComponent } from '../../dialogs/item-window/item-window.component';
-import { MenuService } from '../../../shared/services/menu/menu.service';
 import { Dish } from '../../../shared/interfaces/menu.interface';
+import { AppState } from '../../../store/app.state';
+import { getAllDishes } from '../../../store/dishes/dishes.action';
+import { selectDishes } from '../../../store/dishes/dishes.selector';
 
 @Component({
   selector: 'app-menu',
@@ -13,21 +16,17 @@ import { Dish } from '../../../shared/interfaces/menu.interface';
   styleUrl: './menu.component.css',
 })
 export class MenuComponent implements OnInit, OnDestroy {
-  public menu: Dish[] = [];
-  public filteredMenu: Dish[] = [];
+  public menu$!: Observable<Dish[]>;
   public choosenCategory: string[] = [];
   public searcher = new FormControl('', [Validators.minLength(3)]);
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private menuService: MenuService, public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    // this.menuService.currentDishes
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((dishes) => {
-    //     this.menu = dishes;
-    //   });
+    this.store.dispatch(getAllDishes({ categories: [], dish: '' }));
+    this.menu$ = this.store.select(selectDishes);
 
     this.searcher.valueChanges
       .pipe(
@@ -36,16 +35,23 @@ export class MenuComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        this.menuService.getAllDishes(
-          this.choosenCategory,
-          this.searcher.value!
+        this.store.dispatch(
+          getAllDishes({
+            categories: this.choosenCategory,
+            dish: this.searcher.value!,
+          })
         );
       });
   }
 
   public filterByCategory(categories: string[]) {
     this.choosenCategory = categories;
-    this.menuService.getAllDishes(this.choosenCategory, this.searcher.value!);
+    this.store.dispatch(
+      getAllDishes({
+        categories: this.choosenCategory,
+        dish: this.searcher.value!,
+      })
+    );
   }
 
   public openDialog(id: string): void {

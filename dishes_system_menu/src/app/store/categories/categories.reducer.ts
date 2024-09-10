@@ -1,9 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import {
-  getAllCategories,
-  getAllCategoriesFailure,
-  getAllCategoriesSuccess,
-} from './categories.action';
+import * as CategoriesActions from './categories.action';
 
 export interface CategoriesState {
   categories: string[];
@@ -18,10 +14,13 @@ export const initialState: CategoriesState = {
 export const CategoriesReducer = createReducer(
   initialState,
 
-  on(getAllCategories, (state) => ({ ...state })),
-  on(getAllCategoriesSuccess, (state, { categories }) => ({
+  on(CategoriesActions.getAllCategories, (state) => ({ ...state })),
+  on(CategoriesActions.getAllCategoriesSuccess, (state, { categories }) => ({
     ...state,
     categories,
   })),
-  on(getAllCategoriesFailure, (state, { error }) => ({ ...state, error }))
+  on(CategoriesActions.getAllCategoriesFailure, (state, { error }) => ({
+    ...state,
+    error,
+  }))
 );

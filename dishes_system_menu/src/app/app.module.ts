@@ -14,10 +14,9 @@ import { CoreModule } from './core/core.module';
 import { MenuModule } from './menu/menu.module';
 import { AuthModule } from './auth/auth.module';
 
-import { provideState, provideStore } from '@ngrx/store';
-import { CategoriesReducer } from './store/categories/categories.reducer';
-import { provideEffects } from '@ngrx/effects';
-import { CateogiresEffect } from './store/categories/categories.effect';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { appEffects, appStore } from './store/app.state';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,9 +26,12 @@ import { CateogiresEffect } from './store/categories/categories.effect';
     MenuModule,
     AuthModule,
     AppRoutingModule,
+    HttpClientModule,
+    StoreModule.forRoot(appStore),
+    EffectsModule.forRoot(appEffects),
     StoreDevtoolsModule.instrument({
-      maxAge: 25, // Максимальна кількість екшенів для збереження історії
-      logOnly: environment.production, // Працює лише в режимі розробки
+      maxAge: 25,
+      logOnly: environment.production,
     }),
   ],
   providers: [
@@ -45,9 +47,6 @@ import { CateogiresEffect } from './store/categories/categories.effect';
       useClass: TokenExpireInterceptor,
       multi: true,
     },
-    provideStore(),
-    provideState({ name: 'categories', reducer: CategoriesReducer }),
-    provideEffects(CateogiresEffect),
   ],
   bootstrap: [AppComponent],
 })

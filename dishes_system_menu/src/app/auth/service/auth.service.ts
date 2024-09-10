@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from '../../shared/interfaces/user.interface';
 
 @Injectable({
@@ -8,25 +8,17 @@ import { User } from '../../shared/interfaces/user.interface';
 })
 export class AuthService {
   private apiUrl = import.meta.env.NG_APP_API_URL;
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
   login(username: string, password: string): Observable<HttpResponse<User>> {
     const params = { username, password };
 
-    return this.http
-      .post<User>(
-        `${this.apiUrl}/api/auth/login`,
-        { params },
-        { observe: 'response', withCredentials: true }
-      )
-      .pipe(
-        tap((user) => {
-          this.currentUserSubject.next(user.body);
-        })
-      );
+    return this.http.post<User>(
+      `${this.apiUrl}/api/auth/login`,
+      { params },
+      { observe: 'response', withCredentials: true }
+    );
   }
 
   register(username: string, password: string): Observable<void> {
@@ -39,26 +31,14 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
-    this.currentUserSubject.next(null);
   }
 
-  tokenHandler(response: HttpResponse<any>): void {
-    const accessToken = response.headers.get('Authorization');
-
-    if (accessToken) {
-      localStorage.setItem('token', accessToken);
-    } else {
-      throwError(accessToken);
-    }
-  }
-
-  public get currentUserValue(): User | null {
-    return this.currentUserSubject.value;
+  tokenHandler(response: HttpResponse<any>): string | null {
+    return response.headers.get('Authorization');
   }
 
   public isAuthorized(): boolean {
-    const user = this.currentUserValue;
-    if (!user) return false;
-    return true;
+    const token = localStorage.getItem('token');
+    return !!token;
   }
 }

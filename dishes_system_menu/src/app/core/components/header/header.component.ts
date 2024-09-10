@@ -1,23 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DishWindowComponent } from '../../../menu/dialogs/dish-window/dish-window.component';
-import { AuthService } from '../../../auth/service/auth.service';
-import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/app.state';
+import { selectAuthUser } from '../../../store/auth/auth.selector';
+import { Observable } from 'rxjs';
+import { User } from '../../../shared/interfaces/user.interface';
+import { Logout } from '../../../store/auth/auth.action';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {
-  public userRoles: string[] | undefined = undefined;
+export class HeaderComponent implements OnInit {
+  private user$!: Observable<User | null>;
+  public userRoles: string[] | undefined = [];
 
-  constructor(
-    public dialog: MatDialog,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.authService.currentUser.subscribe((v) => (this.userRoles = v?.roles));
+  constructor(public dialog: MatDialog, private store: Store<AppState>) {}
+
+  ngOnInit(): void {
+    this.user$ = this.store.select(selectAuthUser);
+    this.user$.subscribe((user) => (this.userRoles = user?.roles));
   }
 
   public openDishDialog(id: string | null) {
@@ -28,7 +32,6 @@ export class HeaderComponent {
   }
 
   public Logout() {
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
+    this.store.dispatch(Logout());
   }
 }

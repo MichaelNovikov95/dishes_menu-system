@@ -1,12 +1,19 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
-import { take } from 'rxjs';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
-import { MenuService } from '../../../shared/services/menu/menu.service';
 import { Dish } from '../../../shared/interfaces/menu.interface';
 import { DishWindowComponent } from '../dish-window/dish-window.component';
-import { AuthService } from '../../../auth/service/auth.service';
+import { AppState } from '../../../store/app.state';
+import {
+  deleteDishById,
+  getDishById,
+} from '../../../store/dishes/dishes.action';
+import { selectDish } from '../../../store/dishes/dishes.selector';
+import { User } from '../../../shared/interfaces/user.interface';
+import { selectAuthUser } from '../../../store/auth/auth.selector';
 
 @Component({
   selector: 'app-item-window',
@@ -14,28 +21,26 @@ import { AuthService } from '../../../auth/service/auth.service';
   styleUrl: './item-window.component.css',
 })
 export class ItemWindowComponent implements OnInit {
-  dish: Dish | undefined;
-  id: string | undefined;
-  public userRoles: string[] | undefined = undefined;
+  private user$!: Observable<User | null>;
+  public dish$!: Observable<Dish | null>;
+  public id: string;
+  public userRoles: string[] | undefined = [];
 
   constructor(
     public dialogRef: MatDialogRef<ItemWindowComponent>,
-    private menuService: MenuService,
-    private authService: AuthService,
+    private store: Store<AppState>,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: { id: string }
   ) {
     this.id = data.id;
-    this.authService.currentUser.subscribe((v) => (this.userRoles = v?.roles));
   }
 
   ngOnInit(): void {
-    if (this.id) {
-      this.menuService
-        .getDishById(this.id)
-        .pipe(take(1))
-        .subscribe((dish) => (this.dish = dish));
-    }
+    this.user$ = this.store.select(selectAuthUser);
+    this.user$.subscribe((user) => (this.userRoles = user?.roles));
+
+    this.store.dispatch(getDishById({ id: this.id }));
+    this.dish$ = this.store.select(selectDish);
   }
 
   public updateDish(id: string) {
@@ -43,17 +48,7 @@ export class ItemWindowComponent implements OnInit {
   }
 
   public deleteDish(id: string) {
-    this.menuService
-      .deleteDishById(id)
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          console.log('Dish deleted successfully');
-        },
-        error: (err) => {
-          console.error('Error deleting dish:', err);
-        },
-      });
+    this.store.dispatch(deleteDishById({ id: id }));
     this.itemWindowClose();
   }
 

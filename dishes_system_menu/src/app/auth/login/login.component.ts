@@ -1,15 +1,16 @@
-import { Component, OnDestroy } from '@angular/core';
-import { AuthService } from '../service/auth.service';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
+
+import { AppState } from '../../store/app.state';
+import { Login } from '../../store/auth/auth.action';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent {
   userForm = new FormGroup({
     username: new FormControl('', Validators.required),
     password: new FormControl('', [
@@ -19,24 +20,16 @@ export class LoginComponent implements OnDestroy {
     ]),
   });
 
-  private destroy$: Subject<boolean> = new Subject<boolean>();
-
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private store: Store<AppState>) {}
 
   login() {
     if (this.userForm.valid) {
-      this.authService
-        .login(this.userForm.value.username!, this.userForm.value.password!)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((response) => {
-          this.authService.tokenHandler(response);
-          this.router.navigate(['/']);
-        });
+      this.store.dispatch(
+        Login({
+          username: this.userForm.value.username!,
+          password: this.userForm.value.password!,
+        })
+      );
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

@@ -1,50 +1,41 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-// import { CategoriesService } from '../../../shared/services/categories/categories.service';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import { MenuService } from '../../../shared/services/menu/menu.service';
-import { Dish } from '../../../shared/interfaces/menu.interface';
-import { Observable, Subject, take, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-// import { AppState } from '../../../store/reducers/index.reducer';
+
+import { Dish } from '../../../shared/interfaces/menu.interface';
+import { AppState } from '../../../store/app.state';
+import { getAllCategories } from '../../../store/categories/categories.action';
+import { selectCategories } from '../../../store/categories/categories.selector';
+import { getDishById } from '../../../store/dishes/dishes.action';
+import { selectDish } from '../../../store/dishes/dishes.selector';
 
 @Component({
   selector: 'app-dish-window',
   templateUrl: './dish-window.component.html',
   styleUrl: './dish-window.component.css',
 })
-export class DishWindowComponent implements OnInit, OnDestroy {
-  public categories: string[] = [];
+export class DishWindowComponent implements OnInit {
+  public categories$!: Observable<string[]>;
   public id: string | null = null;
-  public dish!: Observable<Dish>;
-
-  private destroy$: Subject<boolean> = new Subject<boolean>();
+  public dish$!: Observable<Dish | null>;
 
   constructor(
-    // private categoryService: CategoriesService,
-    // private store: Store<AppState>,
-    private menuService: MenuService,
+    private store: Store<AppState>,
 
     @Inject(MAT_DIALOG_DATA) public data: { id: string }
   ) {
     this.id = data.id;
-    // console.log(this.store);
   }
 
   ngOnInit(): void {
-    // this.categoryService.currentCategories
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((categories) => {
-    //     this.categories = categories;
-    //   });
+    this.store.dispatch(getAllCategories());
+
+    this.categories$ = this.store.select(selectCategories);
 
     if (this.id) {
-      this.dish = this.menuService.getDishById(this.id).pipe(take(1));
+      this.store.dispatch(getDishById({ id: this.id }));
+      this.dish$ = this.store.select(selectDish);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

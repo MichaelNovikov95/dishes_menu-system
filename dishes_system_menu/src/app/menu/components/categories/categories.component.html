@@ -2,11 +2,11 @@
   <div formArrayName="selectedCategories">
     <label
       class="category_item"
-      *ngFor="let category of categories; let i = index"
-      [ngClass]="{ active: form.get('selectedCategories')?.value[i] }"
+      *ngFor="let category of formArray.controls; let i = index"
+      [ngClass]="{ active: formArray.controls[i].value }"
     >
       <input class="category_input" type="checkbox" [formControlName]="i" />
-      {{ category }}
+      {{ (categories$ | async)?.[i] }}
     </label>
   </div>
 </form>

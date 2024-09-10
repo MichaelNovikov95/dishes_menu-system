@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../service/auth.service';
 import {
   AbstractControl,
   FormControl,
@@ -8,8 +7,10 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+
+import { AppState } from '../../store/app.state';
+import { Register } from '../../store/auth/auth.action';
 
 @Component({
   selector: 'app-register',
@@ -27,18 +28,16 @@ export class RegisterComponent {
     { validators: this.passCheker() }
   );
 
-  private destroy$: Subject<boolean> = new Subject<boolean>();
-
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private store: Store<AppState>) {}
 
   register() {
     if (this.userForm.valid) {
-      this.authService
-        .register(this.userForm.value.username!, this.userForm.value.password!)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => this.router.navigate(['/auth/login']));
-    } else {
-      this.errorMessage = "Passwords didn't match. Check it.";
+      this.store.dispatch(
+        Register({
+          username: this.userForm.value.username!,
+          password: this.userForm.value.password!,
+        })
+      );
     }
   }
 
@@ -49,10 +48,5 @@ export class RegisterComponent {
 
       return password === rep_password ? null : { mismatch: true };
     };
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

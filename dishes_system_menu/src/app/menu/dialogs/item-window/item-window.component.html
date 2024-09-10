@@ -1,5 +1,5 @@
 <div class="dialog_header">
-  <h2 mat-dialog-title class="dialog_title">{{ dish?.name }}</h2>
+  <h2 mat-dialog-title class="dialog_title">{{ (dish$ | async)?.name }}</h2>
   <div mat-dialog-actions class="icon_wrapper">
     <img
       mat-button
@@ -13,13 +13,17 @@
   </div>
 </div>
 <div mat-dialog-content class="dialog_content">
-  <img class="dialog_img" src="{{ dish?.image }}" alt="{{ dish?.name }}" />
+  <img
+    class="dialog_img"
+    src="{{ (dish$ | async)?.image }}"
+    alt="{{ (dish$ | async)?.name }}"
+  />
   <div>
-    <p class="dialog_text">{{ dish?.price | currency }}</p>
-    <p class="dialog_text">{{ dish?.description }}</p>
+    <p class="dialog_text">{{ (dish$ | async)?.price | currency }}</p>
+    <p class="dialog_text">{{ (dish$ | async)?.description }}</p>
     <div *ngIf="this.userRoles?.includes('admin')">
-      <button (click)="updateDish(dish?.id!)">Update</button>
-      <button (click)="deleteDish(dish?.id!)">Delete</button>
+      <button (click)="updateDish(id)">Update</button>
+      <button (click)="deleteDish(id)">Delete</button>
     </div>
   </div>
 </div>

@@ -10,12 +10,12 @@
   </form>
 
   <div class="menu">
-    @for(dish of menu; track dish.id){
+    @for(dish of menu$ | async; track dish.id){
 
     <app-menu-list (click)="openDialog(dish.id!)" [dish]="dish"></app-menu-list>
 
     }
-    <div *ngIf="!menu.length && choosenCategory.length">
+    <div *ngIf="(menu$ | async)?.length === 0 && choosenCategory.length">
       <p>Sorry, no match found. Try to find something else</p>
     </div>
   </div>
