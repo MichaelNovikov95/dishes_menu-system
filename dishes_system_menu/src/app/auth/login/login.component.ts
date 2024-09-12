@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../store/app.state';
@@ -11,25 +16,25 @@ import { Login } from '../../store/auth/auth.action';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  userForm = new FormGroup({
-    username: new FormControl('', Validators.required),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(16),
-    ]),
-  });
+  public userForm: FormGroup;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>, private fb: FormBuilder) {
+    this.userForm = this.fb.group({
+      username: ['', Validators.required],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(16),
+        ],
+      ],
+    });
+  }
 
-  login() {
+  public login(): void {
     if (this.userForm.valid) {
-      this.store.dispatch(
-        Login({
-          username: this.userForm.value.username!,
-          password: this.userForm.value.password!,
-        })
-      );
+      this.store.dispatch(Login({ ...this.userForm.value }));
     }
   }
 }

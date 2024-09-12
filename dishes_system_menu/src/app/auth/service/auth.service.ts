@@ -11,7 +11,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<HttpResponse<User>> {
+  public login(
+    username: string,
+    password: string
+  ): Observable<HttpResponse<User>> {
     const params = { username, password };
 
     return this.http.post<User>(
@@ -21,7 +24,7 @@ export class AuthService {
     );
   }
 
-  register(username: string, password: string): Observable<void> {
+  public register(username: string, password: string): Observable<void> {
     const newUser = { username, password, roles: ['user'] };
     return this.http.post<void>(
       `${this.apiUrl}/api/auth/registration`,
@@ -29,11 +32,11 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  public logout(): void {
     localStorage.removeItem('token');
   }
 
-  tokenHandler(response: HttpResponse<any>): string | null {
+  public tokenHandler(response: HttpResponse<any>): string | null {
     return response.headers.get('Authorization');
   }
 

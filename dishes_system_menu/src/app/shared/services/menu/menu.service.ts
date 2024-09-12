@@ -13,7 +13,10 @@ export class MenuService {
 
   constructor(private http: HttpClient) {}
 
-  getAllDishes(categories?: string[], dish?: string): Observable<Dish[]> {
+  public getAllDishes(
+    categories?: string[],
+    dish?: string
+  ): Observable<Dish[]> {
     let params: Params = {};
 
     if (categories) {
@@ -26,11 +29,11 @@ export class MenuService {
     return this.http.get<Dish[]>(`${this.apiUrl}/api/menu`, { params });
   }
 
-  getDishById(id: string): Observable<Dish> {
+  public getDishById(id: string): Observable<Dish> {
     return this.http.get<Dish>(`${this.apiUrl}/api/menu/${id}`);
   }
 
-  createDish(newDish: Dish): Observable<Dish> {
+  public createDish(newDish: Dish): Observable<Dish> {
     const headers = new HttpHeaders();
     headers.set('Content-Type', 'application/json');
 
@@ -39,7 +42,7 @@ export class MenuService {
     });
   }
 
-  updateDishById(id: string, dish: Dish): Observable<Dish> {
+  public updateDishById(id: string, dish: Dish): Observable<Dish> {
     const headers = new HttpHeaders();
     headers.set('Content-Type', 'application/json');
 
@@ -48,7 +51,7 @@ export class MenuService {
     });
   }
 
-  deleteDishById(id: string): Observable<void> {
+  public deleteDishById(id: string): Observable<void> {
     this.getAllDishes();
 
     return this.http.delete<void>(`${this.apiUrl}/api/menu/${id}`);

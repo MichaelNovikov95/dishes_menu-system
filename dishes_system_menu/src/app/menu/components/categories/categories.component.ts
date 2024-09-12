@@ -39,11 +39,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     });
   }
 
-  get formArray() {
+  get formArray(): FormArray {
     return this.form.get('selectedCategories') as FormArray;
   }
 
-  initCategoriesForm(categoires: string[]): void {
+  private initCategoriesForm(categoires: string[]): void {
     this.form = this.fb.group({
       selectedCategories: this.fb.array(categoires.map(() => false)),
     });

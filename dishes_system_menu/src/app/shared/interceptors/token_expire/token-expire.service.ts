@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class TokenExpireInterceptor implements HttpInterceptor {
   constructor(private router: Router) {}
 
-  intercept(
+  public intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {

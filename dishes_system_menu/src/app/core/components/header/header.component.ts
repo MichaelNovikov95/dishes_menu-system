@@ -14,24 +14,22 @@ import { Logout } from '../../../store/auth/auth.action';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-  private user$!: Observable<User | null>;
-  public userRoles: string[] | undefined = [];
+  public user$!: Observable<User | null>;
 
   constructor(public dialog: MatDialog, private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.user$ = this.store.select(selectAuthUser);
-    this.user$.subscribe((user) => (this.userRoles = user?.roles));
   }
 
-  public openDishDialog(id: string | null) {
+  public openDishDialog(id: string | null): void {
     this.dialog.open(DishWindowComponent, {
       width: '1000px',
       data: { id: null },
     });
   }
 
-  public Logout() {
+  public Logout(): void {
     this.store.dispatch(Logout());
   }
 }

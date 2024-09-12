@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class HeaderInterceptor implements HttpInterceptor {
-  intercept(
+  public intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {

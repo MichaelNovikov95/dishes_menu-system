@@ -44,7 +44,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       });
   }
 
-  public filterByCategory(categories: string[]) {
+  public filterByCategory(categories: string[]): void {
     this.choosenCategory = categories;
     this.store.dispatch(
       getAllDishes({

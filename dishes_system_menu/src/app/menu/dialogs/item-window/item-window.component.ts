@@ -21,10 +21,9 @@ import { selectAuthUser } from '../../../store/auth/auth.selector';
   styleUrl: './item-window.component.css',
 })
 export class ItemWindowComponent implements OnInit {
-  private user$!: Observable<User | null>;
+  public user$!: Observable<User | null>;
   public dish$!: Observable<Dish | null>;
   public id: string;
-  public userRoles: string[] | undefined = [];
 
   constructor(
     public dialogRef: MatDialogRef<ItemWindowComponent>,
@@ -37,7 +36,6 @@ export class ItemWindowComponent implements OnInit {
 
   ngOnInit(): void {
     this.user$ = this.store.select(selectAuthUser);
-    this.user$.subscribe((user) => (this.userRoles = user?.roles));
 
     this.store.dispatch(getDishById({ id: this.id }));
     this.dish$ = this.store.select(selectDish);

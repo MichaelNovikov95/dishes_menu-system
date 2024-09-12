@@ -20,19 +20,19 @@ export class SearcherComponent implements ControlValueAccessor {
   private onChange!: (value: string) => void;
   private onTouched!: () => void;
 
-  writeValue(value: string): void {
+  public writeValue(value: string): void {
     this.searcher = value;
   }
 
-  registerOnChange(fn: any): void {
+  public registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
-  onInputChange(event: Event): void {
+  public onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searcher = input.value;
 

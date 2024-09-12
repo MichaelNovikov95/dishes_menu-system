@@ -71,7 +71,7 @@ export class DishFormComponent implements OnInit {
     }
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     if (this.selectedFile) {
       this.newDishForm.patchValue({ image: this.selectedFile });
     }
@@ -83,11 +83,11 @@ export class DishFormComponent implements OnInit {
     this.dialogRef.closeAll();
   }
 
-  private createDish() {
+  public createDish(): void {
     this.store.dispatch(createDish({ newDish: this.newDishForm.value }));
   }
 
-  private updateDish(id: string) {
+  public updateDish(id: string): void {
     this.store.dispatch(
       updateDishById({ id: id, dish: this.newDishForm.value })
     );
