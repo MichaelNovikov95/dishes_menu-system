@@ -1,0 +1,11 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      NG_APP_APU_URL: ${NG_APP_APU_URL}
+    volumes:
+      - .:/app
