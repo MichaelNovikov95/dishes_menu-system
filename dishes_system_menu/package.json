@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "NG_APP_ENV ng serve",
+    "start:backend": "npm run start:backend",
     "build": "NG_APP_ENV=production ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
