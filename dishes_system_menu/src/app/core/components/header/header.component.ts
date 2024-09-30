@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DishWindowComponent } from '../../../menu/dialogs/dish-window/dish-window.component';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
+
+import { DishWindowComponent } from '../../../menu/dialogs/dish-window/dish-window.component';
 import { AppState } from '../../../store/app.state';
-import { selectAuthUser } from '../../../store/auth/auth.selector';
-import { Observable } from 'rxjs';
-import { User } from '../../../shared/interfaces/user.interface';
 import { Logout } from '../../../store/auth/auth.action';
 
 @Component({
@@ -13,13 +12,20 @@ import { Logout } from '../../../store/auth/auth.action';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit {
-  public user$!: Observable<User | null>;
+export class HeaderComponent implements OnInit, OnDestroy {
+  public userRole: string[] | null = null;
+
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(public dialog: MatDialog, private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.user$ = this.store.select(selectAuthUser);
+    this.store
+      .select('auth')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((authState) => {
+        this.userRole = authState.roles;
+      });
   }
 
   public openDishDialog(id: string | null): void {
@@ -31,5 +37,10 @@ export class HeaderComponent implements OnInit {
 
   public Logout(): void {
     this.store.dispatch(Logout());
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

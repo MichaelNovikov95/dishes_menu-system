@@ -6,14 +6,11 @@
   </div>
   <app-navbar></app-navbar>
   <div class="headers_buttons">
-    <button
-      *ngIf="(user$ | async)?.roles?.includes('admin')"
-      (click)="openDishDialog(null)"
-    >
+    <button *ngIf="userRole?.includes('admin')" (click)="openDishDialog(null)">
       Add Dish
     </button>
     <a
-      *ngIf="!(user$ | async)?.roles"
+      *ngIf="!userRole"
       class="login_icon-wrapper"
       [routerLink]="['/auth/login']"
     >
@@ -23,9 +20,7 @@
         alt="user-circle.svg"
       />
     </a>
-    <button *ngIf="(user$ | async)?.roles?.length" (click)="Logout()">
-      Logout
-    </button>
+    <button *ngIf="userRole" (click)="Logout()">Logout</button>
     <app-cart-button class="app-cart-button"></app-cart-button>
   </div>
 </header>

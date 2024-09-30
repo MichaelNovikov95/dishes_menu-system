@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { MenuRoutingModule } from './menu-routing.module';
 import { MenuComponent } from './components/menu/menu.component';
@@ -15,6 +16,8 @@ import { SearcherComponent } from './components/searcher/searcher.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { DishWindowComponent } from './dialogs/dish-window/dish-window.component';
 import { DishFormComponent } from './components/dish-form/dish-form.component';
+import { ChatButtonComponent } from './components/chat-button/chat-button.component';
+import { ChatWindowComponent } from './dialogs/chat-window/chat-window.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,8 @@ import { DishFormComponent } from './components/dish-form/dish-form.component';
     CategoriesComponent,
     DishWindowComponent,
     DishFormComponent,
+    ChatButtonComponent,
+    ChatWindowComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +41,7 @@ import { DishFormComponent } from './components/dish-form/dish-form.component';
     MatButtonModule,
     ReactiveFormsModule,
     MatCheckboxModule,
+    MatSnackBarModule,
   ],
   exports: [MenuComponent],
 })

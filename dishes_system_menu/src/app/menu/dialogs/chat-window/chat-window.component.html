@@ -1,0 +1,45 @@
+<div class="chat-window">
+  <h3 class="chat-header" *ngIf="!userRole?.includes('admin')">Support Chat</h3>
+  <h4 class="chat-header" *ngIf="userRole?.includes('admin')">Users Online</h4>
+
+  <div *ngIf="userRole?.includes('admin') && !adminCanSendMessage">
+    <div class="users-list" *ngIf="users.length; else noRooms">
+      <ul>
+        <li *ngFor="let user of users" (click)="connectToRoom(user)">
+          {{ user }}
+          <span *ngIf="unreadMessages[user] > 0">
+            {{ unreadMessages[user] }} new messages
+          </span>
+        </li>
+      </ul>
+    </div>
+    <ng-template #noRooms>
+      <p>No users online.</p>
+    </ng-template>
+  </div>
+
+  <div *ngIf="adminCanSendMessage">
+    <p class="go-back" (click)="goBack()">Back</p>
+  </div>
+
+  <div class="chat-container">
+    <ul class="messages-list">
+      <li *ngFor="let message of messages" class="message-item">
+        <strong class="message-content">{{ message.content }}</strong>
+        <span class="message-time">{{
+          message.createdAt | date : "HH:mm"
+        }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="input-area" *ngIf="adminCanSendMessage">
+    <input type="text" [formControl]="newMessage" />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+
+  <div class="input-area" *ngIf="!userRole?.includes('admin')">
+    <input type="text" [formControl]="newMessage" />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>

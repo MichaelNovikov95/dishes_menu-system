@@ -21,7 +21,7 @@
   <div>
     <p class="dialog_text">{{ (dish$ | async)?.price | currency }}</p>
     <p class="dialog_text">{{ (dish$ | async)?.description }}</p>
-    <div *ngIf="(user$ | async)?.roles?.includes('admin')">
+    <div *ngIf="userRole?.includes('admin')">
       <button (click)="updateDish(id)">Update</button>
       <button (click)="deleteDish(id)">Delete</button>
     </div>

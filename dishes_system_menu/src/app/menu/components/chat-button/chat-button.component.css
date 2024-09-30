@@ -1,0 +1,10 @@
+.chat-button {
+  position: fixed;
+  bottom: 50px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.chat-icon {
+  width: 60px;
+}

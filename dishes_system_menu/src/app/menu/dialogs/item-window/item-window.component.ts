@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Dish } from '../../../shared/interfaces/menu.interface';
@@ -12,18 +12,18 @@ import {
   getDishById,
 } from '../../../store/dishes/dishes.action';
 import { selectDish } from '../../../store/dishes/dishes.selector';
-import { User } from '../../../shared/interfaces/user.interface';
-import { selectAuthUser } from '../../../store/auth/auth.selector';
 
 @Component({
   selector: 'app-item-window',
   templateUrl: './item-window.component.html',
   styleUrl: './item-window.component.css',
 })
-export class ItemWindowComponent implements OnInit {
-  public user$!: Observable<User | null>;
+export class ItemWindowComponent implements OnInit, OnDestroy {
+  public userRole: string[] | null = null;
   public dish$!: Observable<Dish | null>;
   public id: string;
+
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public dialogRef: MatDialogRef<ItemWindowComponent>,
@@ -35,7 +35,12 @@ export class ItemWindowComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user$ = this.store.select(selectAuthUser);
+    this.store
+      .select('auth')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((authState) => {
+        this.userRole = authState.roles;
+      });
 
     this.store.dispatch(getDishById({ id: this.id }));
     this.dish$ = this.store.select(selectDish);
@@ -59,5 +64,10 @@ export class ItemWindowComponent implements OnInit {
       width: '1000px',
       data: { id },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

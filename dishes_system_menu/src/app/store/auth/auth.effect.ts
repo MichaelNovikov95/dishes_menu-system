@@ -27,14 +27,17 @@ export class AuthEffects {
           this.authService.login(username, password).pipe(
             map((response) => {
               const user = response.body;
+              const roles = user?.roles || [];
               const accessToken = this.authService.tokenHandler(response);
 
               if (accessToken) {
                 localStorage.setItem('token', accessToken);
+                localStorage.setItem('roles', JSON.stringify(roles));
+                localStorage.setItem('userId', JSON.stringify(user?.id));
               }
 
               if (user) {
-                return AuthActions.LoginSuccess({ user });
+                return AuthActions.LoginSuccess({ roles });
               } else {
                 throw Error('User not found');
               }
@@ -89,7 +92,7 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.Logout),
         map(() => {
-          localStorage.removeItem('token');
+          localStorage.clear();
           return AuthActions.LogoutSuccess();
         })
       )
